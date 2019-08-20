@@ -1,6 +1,6 @@
 if (typeof namespace == 'undefined')
 {
-    var namespace = {};
+    var namespace = new Object();
 }
 
 
@@ -10,7 +10,7 @@ if (typeof namespace == 'undefined')
 
 if (typeof namespace.__ == 'undefined')
 {
-    namespace.__ = {};
+    namespace.__ = new Object();
 }
 
 namespace.__.MOUSE =
@@ -43,7 +43,7 @@ namespace.__.MOUSE.init();
 
 if (typeof namespace.core == 'undefined')
 {
-    namespace.core = {};
+    namespace.core = new Object();
 }
 
 namespace.core.Mouse = (() => 
@@ -74,6 +74,30 @@ namespace.core.Mouse = (() =>
         }
 	};
 
+	Mouse.prototype.onClick = function(element, callback)
+	{
+		element.addEventListener("click", callback);
+
+		// remove event listener once element is disposed
+		GarbageCollector.addDispose(element, () =>
+		{
+			element.removeEventListener("click", callback);
+		});
+	},
+
+	Mouse.prototype.onClickOnce = function(element, callback)
+	{
+		var _this = this;
+
+		var preCallback = function()
+		{
+			element.removeEventListener("click", preCallback);
+			callback();
+		};
+
+		_this.onClick(element, preCallback);
+	},
+
 	Mouse.prototype.getPositionX = function()
 	{
 		return namespace.__.MOUSE.moveEvent.clientX;
@@ -84,7 +108,7 @@ namespace.core.Mouse = (() =>
 		return namespace.__.MOUSE.moveEvent.clientY;
 	}
 	
-	Mouse.prototype.dipose = function()
+	Mouse.prototype.dispose = function()
 	{
 		new Exception.NotImplemented();
 	};

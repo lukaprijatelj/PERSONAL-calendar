@@ -1,6 +1,6 @@
 
 // namespace
-var Exception = {};
+var Exception = new Object();
 
 if (typeof module !== 'undefined' && module.exports)
 {

@@ -1,5 +1,5 @@
 // namespace
-var Warning = {};
+var Warning = new Object();
 
 if (typeof module !== 'undefined' && module.exports)
 {

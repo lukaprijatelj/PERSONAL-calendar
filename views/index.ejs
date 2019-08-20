@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title><%= title %></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<meta name="title" content="Calendar">
+		<meta name="author" content="Luka Prijatelj">
+		<meta name="year" content="2019">
+		
+		<!-- favicon -->
+		<link rel="icon" type="image/png" href="images/admin-favicon.png" />
+
+		<!-- fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Muli:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+		<!-- styles -->
+		<link rel="stylesheet" href="stylesheets/common.css">
+		<link rel="stylesheet" href="stylesheets/index.css">
+
+		<!-- Placeholder for dynamically loading CSS files -->
+		<script type="namespace-core:css-loader"></script>
+
+		<!-- constants -->
+		<script src="javascripts/constants.js"></script>
+	
+		<!-- Extension scripts -->
+		<script src="javascripts/namespace-core/Path.js"></script>
+		<script src="javascripts/namespace-core/Importer.js"></script>
+		<script src="javascripts/namespace-core/Function.js"></script>
+		<script src="javascripts/namespace-core/Array.js"></script>
+		<script src="javascripts/namespace-core/Date.js"></script>
+		<script src="javascripts/namespace-core/Enum.js"></script>
+		<script src="javascripts/namespace-core/Math.js"></script>
+		<script src="javascripts/namespace-core/String.js"></script>
+		<script src="javascripts/namespace-core/Object.js"></script>
+		<script src="javascripts/namespace-core/HTMLElement.js"></script>
+		<script src="javascripts/namespace-core/console.js"></script>
+		<script src="javascripts/namespace-core/Exception.js"></script>
+		<script src="javascripts/namespace-core/Warning.js"></script>
+		<script src="javascripts/namespace-core/Thread.js"></script>
+		<script src="javascripts/namespace-core/Timer.js"></script>
+		<script src="javascripts/namespace-core/Mouse.js"></script>
+		<script src="javascripts/namespace-core/Event.js"></script>
+		<script src="javascripts/namespace-core/Image.js"></script>
+		<script src="javascripts/namespace-core/RawImage.js"></script>
+		<script src="javascripts/namespace-core/Ajax.js"></script>
+		<script src="javascripts/namespace-core/Unit.js"></script>
+		<script src="javascripts/namespace-core/GarbageCollector.js"></script>
+		<script src="javascripts/namespace-core/Char.js"></script>
+		<script src="javascripts/namespace-core/Browser.js"></script>
+
+		<!-- Placeholder for dynamically loading JS files -->
+		<script type="namespace-core:js-loader"></script>		
+	</head>
+	<body>
+		<interface>
+
+			<layer id="calendar"></layer>
+
+			<layer id="popups" class="hidden">
+				<curtain onclick="GLOBALS.onPopupCurtainClick()"></curtain>
+				<list></list>
+			</layer>
+
+		</interface>
+
+		<!-- ----------------------------- -->
+		<!-- Scripts that will be loaded synchronously -->
+		<!-- ----------------------------- -->
+		<script src="javascripts/index.js"></script>
+	</body>
+</html>

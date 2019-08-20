@@ -59,6 +59,31 @@ Date.today = function()
 	return today;
 };
 
+Date.clone = function(date)
+{
+	return new Date(date.getTime());
+};
+
+Date.prototype.nextDay = function()
+{
+	this.setDate(this.getDate() + 1);
+};
+
+Date.prototype.previousDay = function()
+{
+	this.setDate(this.getDate() - 1);
+};
+
+Date.prototype.nextMonth = function()
+{
+	this.setMonth(this.getMonth() + 1);
+};
+
+Date.prototype.previousMonth = function()
+{
+	this.setMonth(this.getMonth() - 1);
+};
+
 /**
  * Return given datetime to date at midnight (00:00).
  * @param {Date} date - timestamp to be transformed
@@ -74,4 +99,11 @@ Date.getMidnightDate = function(date)
 	newDate.setMilliseconds(0);
 
 	return newDate;
+};
+
+Date.getDayName = function(relativeDay)
+{
+	var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+	return days[relativeDay];
 };

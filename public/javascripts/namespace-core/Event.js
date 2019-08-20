@@ -1,11 +1,11 @@
 if (typeof namespace == 'undefined')
 {
-    var namespace = {};
+    var namespace = new Object();
 }
 
 if (typeof namespace.core == 'undefined')
 {
-    namespace.core = {};
+    namespace.core = new Object();
 }
 
 namespace.core.Event = (() => 
@@ -139,9 +139,9 @@ namespace.core.Event = (() =>
     };
 
     /**
-     * Diposes event object.
+     * Disposes event object.
      */
-    Event.prototype.dipose = function()
+    Event.prototype.dispose = function()
 	{
 		this.removeAll();
 	};

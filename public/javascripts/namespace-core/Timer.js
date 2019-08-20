@@ -1,11 +1,11 @@
 if (typeof namespace == 'undefined')
 {
-    var namespace = {};
+    var namespace = new Object();
 }
 
 if (typeof namespace.core == 'undefined')
 {
-    namespace.core = {};
+    namespace.core = new Object();
 }
 
 namespace.core.Timer = (() => 

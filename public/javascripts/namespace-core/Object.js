@@ -21,7 +21,7 @@ Object.cloneData = function(dst, src)
  */
 Object.shrink = function(template, src) 
 {
-	var dst = {};
+	var dst = new Object();
 	
 	for (var key in template) 
 	{

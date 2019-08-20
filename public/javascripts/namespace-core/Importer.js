@@ -14,7 +14,7 @@
 
 if (typeof namespace == 'undefined')
 {
-    var namespace = {};
+    var namespace = new Object();
 }
 
 
@@ -24,7 +24,7 @@ if (typeof namespace == 'undefined')
 
 if (typeof namespace.__ == 'undefined')
 {
-    namespace.__ = {};
+    namespace.__ = new Object();
 }
 
 namespace.__.IMPORTER = { };
@@ -37,7 +37,7 @@ namespace.__.IMPORTER = { };
 
 if (typeof namespace.core == 'undefined')
 {
-    namespace.core = {};
+    namespace.core = new Object();
 }
 
 (() => 

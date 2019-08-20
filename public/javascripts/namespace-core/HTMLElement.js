@@ -88,7 +88,24 @@ HTMLElement.prototype.getOuterHeight = function()
 	sum = namespace.core.Unit.add(sum, elmMargin);
 	
     return sum
-}
+};
+
+HTMLElement.prototype._appendChild = HTMLElement.prototype.appendChild;
+HTMLElement.prototype.appendChild = function(value)
+{
+	let element;
+	
+	if (typeof value == 'string')
+	{
+		element = HTMLElement.createElement(value);
+	}
+	else
+	{
+		element = value;
+	}	
+
+	this._appendChild(element);
+};
 
 HTMLElement.prototype.addClass = function(value)
 {
@@ -117,16 +134,6 @@ HTMLElement.prototype.hasClass = function(value)
 Element.prototype._notifyOnDispose = function()
 {
 	var _this = this;
-	
-	if (_this.children.length == 0)
-	{
-		if (typeof _this.onDispose == 'function')
-		{
-			_this.onDispose();
-		}
-
-		return;
-	}
 
 	for(var i = 0; i < _this.children.length; i++) 
 	{
@@ -137,6 +144,15 @@ Element.prototype._notifyOnDispose = function()
 			el._notifyOnDispose();
 		}
 	}
+
+	if (GarbageCollector.isDisposable(_this))
+	{
+		GarbageCollector.dispose(_this);
+	}
+	/*else if (typeof _this.onDispose == 'function')
+	{
+		_this.onDispose();
+	}*/
 };
 NodeList.prototype._notifyOnDispose = HTMLCollection.prototype._notifyOnDispose = function() 
 {
@@ -160,6 +176,7 @@ Element.prototype.remove = function()
 {
 	var _this = this;
 		
+	_this._notifyOnDispose();
 	_this.parentElement.removeChild(_this);	
 };
 NodeList.prototype.remove = HTMLCollection.prototype.remove = function() 
@@ -189,8 +206,7 @@ HTMLElement.prototype.empty = function()
 	let _this = this;
 
 	//this.innerHTML = '';
-	
-	_this.children._notifyOnDispose(_this);
+		
 	_this.children.remove();
 };
 
