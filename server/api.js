@@ -1,38 +1,22 @@
 var upload = require('./upload.js');
 var DATABASE = require('./database.js');
-var constants = require('../public/javascripts/constants.js');
-var Exception = require('../public/javascripts/namespace-core/Exception.js');
-var Warning = require('../public/javascripts/namespace-core/Warning.js');
 var options = null;
 
 
 
 var API =
 {
-	/**
-	 * Base url API access.
-	 */
-	baseUrl: '/api',
-
-	/**
-	 * Admin client session ID.
-	 */
-	adminSessionId: '',
-
-	/**
-	 * Is rendering service currently running.
-	 */
-	isRenderingServiceRunning: false,
-
 
     init: function(app)
     {
-		console.log('[Api] Initializing');
+		console.log('[Api] Initialize');
 
         // mutiple callbacks are separated with comma.
         // first upload.single parses file and saves it into request.file
-		app.post(API.baseUrl + '/uploadScene', upload.single('reserved_word-scene'), API.onUploadFile);
+		app.post(API_BASE_URL + '/uploadScene', upload.single('reserved_word-scene'), API.onUploadFile);
 	
+		app.post(API_BASE_URL + '/addReminder', API.onAddReminder);
+		app.post(API_BASE_URL + '/getReminders', API.onGetReminders);
 	},
 
 	
@@ -48,7 +32,23 @@ var API =
 		
 		DATABASE.addUploadedFile(filename, path);
 	
-		response.status(200);	
+		response.sendStatus(200);
+	},
+
+	onAddReminder: async function(request, response)
+	{
+
+		DATABASE.addReminder('test');
+
+		response.sendStatus(200);
+	},
+
+	onGetReminders: async function(request, response)
+	{
+
+		let result = await DATABASE.getReminders();
+
+		response.send(result);
 	}
 };
 

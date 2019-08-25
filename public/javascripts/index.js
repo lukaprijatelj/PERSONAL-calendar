@@ -1,4 +1,4 @@
-
+var db = new PouchDB('my_database');
 
 var GLOBALS =
 {
@@ -6,6 +6,8 @@ var GLOBALS =
 	{
 		GLOBALS.loadMonthView(Date.today());
 	},
+
+	
 
 	loadMonthView: function(currentDay)
 	{
@@ -43,22 +45,22 @@ var GLOBALS =
 		dayIndex--;
 		zeroDate.setDate(zeroDate.getDate() - dayIndex);
 
-		let mouse = new namespace.core.Mouse();
+		let DAYS_IN_WEEK = 7;
 
 		while (zeroDate.getMonth() <= currentDay.getMonth())
 		{
 			let week = HTMLElement.createElement('<week></week>');
 
-			for (let j=0; j<7; j++)
+			for (let j=0; j<DAYS_IN_WEEK; j++)
 			{
-				let dayName = Date.getDayName((j + 1) % 7);
+				let dayName = Date.getDayName((j + 1) % DAYS_IN_WEEK);
 				let day = HTMLElement.createElement('<day data-day-name="' + dayName + '" class="clickable"></day>');
 				let wrapper = HTMLElement.createElement('<wrapper_></wrapper_>');
 				wrapper.appendChild('<title>' + zeroDate.getDate() + '</title>');
 				wrapper.appendChild('<list></list>');
 				day.appendChild(wrapper);
 				
-				mouse.onClick(day, GLOBALS.onDayClick.bind(day));
+				day.onClick(GLOBALS.onDayClick.bind(day));
 
 				if (zeroDate.getMonth() != currentDay.getMonth())
 				{
@@ -81,8 +83,14 @@ var GLOBALS =
 		layer.appendChild(monthView);
 	},
 
-	onDayClick: function()
+	onDayClick: async function()
 	{
+		var ajax = new namespace.core.Ajax(API_BASE_URL + '/getReminders');
+		var result = await ajax.send();
+
+		console.log(result);
+
+		return;
 		var day = this;
 
 		let mouse = new namespace.core.Mouse();
@@ -93,8 +101,6 @@ var GLOBALS =
 		let popup = HTMLElement.createElement('<popup></popup>');
 		popup.style.top = top.toString();
 		popup.style.left = left.toString();
-
-
 
 		let list = document.querySelector('layer#popups>list');
 		list.appendChild(popup);

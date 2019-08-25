@@ -1,6 +1,14 @@
-if (typeof namespace == 'undefined')
+var _this = this;
+
+if (typeof module !== 'undefined' && module.exports)
 {
-    var namespace = new Object();
+	// export for nodeJS use
+	_this = global;
+}
+
+if (typeof _this.namespace == 'undefined')
+{
+    _this.namespace = new Object();
 }
 
 if (typeof namespace.database == 'undefined')
@@ -13,6 +21,8 @@ namespace.database.Reminder = (() =>
 {
 	function Reminder()
 	{
+		this.type = 'reminder';
+		this._id = null;
 		this.startTimestamp = null;
 		this.endTimestamp = null;
 
