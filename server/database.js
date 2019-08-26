@@ -1,6 +1,7 @@
 var uuidv1 = require('uuid/v1');
-var PouchDB = require('pouchdb');
 
+var MongoClient = require('mongodb').MongoClient;
+var ObjectId = require('mongodb').ObjectID;
 
 /**
  * Notes:
@@ -11,7 +12,7 @@ var DATABASE =
 {
 	/**
 	 * Database instance.
-	 * @type {PouchDB}
+	 * @type {MongoDB}
 	 */
 	db: null,
 
@@ -20,29 +21,33 @@ var DATABASE =
 	{
 		console.log('[Database] Initialize');
 
-		DATABASE.db = new PouchDB(DATABASE_ROOT);
+		MongoClient.connect(MONGO_DATABASE_URL, DATABASE.onDatabaseConnected);
 	},
 	
+	onDatabaseConnected: function(err, db)
+    {
+        if (err)
+        {
+            throw err;
+		} 
+		
+		console.log("[Database] Connected!");
+
+        DATABASE.db = db.db(DATABASE_NAME);        
+    },
 
 	/**
 	 * Adds uploaded file record to DATABASE.
 	 */
 	addReminder: async function(title)
-    {		
+    {	
+		let remindersCollection = DATABASE.db.collection('reminders');	
+
 		let reminder = new namespace.database.Reminder();
 		reminder._id = uuidv1();
 		reminder.title = title;
 
-		try
-		{
-			await DATABASE.db.put(reminder);
-		}
-		catch(error)
-		{
-			console.error(error);
-		}
-		
-		return true;
+		await remindersCollection.insertOne(reminder);
     },
 
 	/**
@@ -50,8 +55,10 @@ var DATABASE =
 	 */
     getReminders: async function()
     {
-		var result = await DATABASE.db.find({ selector: { type: 'reminder' } });
+		var remindersCollection = DATABASE.db.collection('reminders');
 
+		var result = await remindersCollection.find({}).toArray();
+		
         return result;
 	}
 };

@@ -164,7 +164,8 @@ layer>curtain
 popup
 {
 	display: block;
-	
+	position: absolute;
+
 	background-color: white;
 }
 

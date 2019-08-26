@@ -1,8 +1,7 @@
 var upload = require('./upload.js');
 var DATABASE = require('./database.js');
+var ApiError = require('../public/javascripts/classes/ApiError.js');
 var options = null;
-
-
 
 var API =
 {
@@ -19,11 +18,25 @@ var API =
 		app.post(API_BASE_URL + '/getReminders', API.onGetReminders);
 	},
 
-	
+	/**
+	 * Respond that error has occured.
+	 */
+	errorHandler: function(error, request, response, next) 
+	{
+		if (!(error instanceof ApiError))
+		{
+			next(error);
+			return;
+		}
+
+		response.status(error.status);
+		response.send(error);
+	},
+
 	/**
 	 * Catches users scene and saves it to local storage.
 	 */
-    onUploadFile: function(request, response)
+    onUploadFile: function(request, response, next)
     {
 		console.log("[Api] File was uploaded");
 
@@ -32,23 +45,52 @@ var API =
 		
 		DATABASE.addUploadedFile(filename, path);
 	
-		response.sendStatus(200);
+		response.status(200).send();
 	},
 
-	onAddReminder: async function(request, response)
+	/**
+	 * Adds remidner to database.
+	 * It will also return error if present.
+	 */
+	onAddReminder: async function(request, response, next)
 	{
+		try
+		{
+			let data = request.body;
 
-		DATABASE.addReminder('test');
+			await DATABASE.addReminder('test');
 
-		response.sendStatus(200);
+			response.status(200).send();
+		}
+		catch (error)
+		{
+			let result = new ApiError();
+			result.message = error.message;
+			result.details = error.stack;
+
+			next(result);
+		}
 	},
 
+	/**
+	 * Returns a list of all reminders.
+	 */
 	onGetReminders: async function(request, response)
 	{
+		try
+		{
+			let result = await DATABASE.getReminders();
 
-		let result = await DATABASE.getReminders();
+			response.status(200).send(result);
+		}
+		catch (error)
+		{
+			let result = new ApiError();
+			result.message = error.message;
+			result.details = error.stack;
 
-		response.send(result);
+			next(result);
+		}
 	}
 };
 

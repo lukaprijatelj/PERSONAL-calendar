@@ -1,0 +1,7 @@
+# Instructions for creating new database named PERSONAL-calendar
+
+# Creates new database
+use PERSONAL-calendar
+
+# Creates collections
+db.createCollection('reminders')

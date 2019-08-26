@@ -34,5 +34,22 @@ namespace.database.Reminder = (() =>
 		this.attachments = null;
 	}
 
+	Reminder.parse = function(data)
+	{
+		let reminder = new Reminder();
+
+		reminder._id = data.hasOwnProperty('_id') ? data._id : -1;
+		reminder.startTimestamp = data.hasOwnProperty('startTimestamp') ? data.startTimestamp : -1;
+		reminder.endTimestamp = data.hasOwnProperty('endTimestamp') ? data.endTimestamp : -1;
+
+		reminder.title = data.hasOwnProperty('title') ? data.title : '';
+		reminder.description = data.hasOwnProperty('description') ? data.description : '';
+
+		reminder.notifications = data.hasOwnProperty('notifications') ? data.notifications : new Array();
+		reminder.attachments = data.hasOwnProperty('attachments') ? data.attachments : new Array();
+
+		return reminder;
+	};
+
 	return Reminder;
 })();

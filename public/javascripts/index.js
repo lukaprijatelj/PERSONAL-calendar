@@ -14,9 +14,9 @@ var GLOBALS =
 		let layer = document.querySelector('layer#calendar');
 		layer.empty();
 
-		let monthView = HTMLElement.createElement('<month-view></month-view>');
+		let monthView = HTMLElement.create('<month-view></month-view>');
 
-		let header = HTMLElement.createElement('<div class="header"></div>');
+		let header = HTMLElement.create('<div class="header"></div>');
 		header.appendChild('<div>' + Date.getDayName(1) + '</div>');
 		header.appendChild('<vertical-line></vertical-line>');
 		header.appendChild('<div>' + Date.getDayName(2) + '</div>');
@@ -49,13 +49,13 @@ var GLOBALS =
 
 		while (zeroDate.getMonth() <= currentDay.getMonth())
 		{
-			let week = HTMLElement.createElement('<week></week>');
+			let week = HTMLElement.create('<week></week>');
 
 			for (let j=0; j<DAYS_IN_WEEK; j++)
 			{
 				let dayName = Date.getDayName((j + 1) % DAYS_IN_WEEK);
-				let day = HTMLElement.createElement('<day data-day-name="' + dayName + '" class="clickable"></day>');
-				let wrapper = HTMLElement.createElement('<wrapper_></wrapper_>');
+				let day = HTMLElement.create('<day data-day-name="' + dayName + '" class="clickable"></day>');
+				let wrapper = HTMLElement.create('<wrapper_></wrapper_>');
 				wrapper.appendChild('<title>' + zeroDate.getDate() + '</title>');
 				wrapper.appendChild('<list></list>');
 				day.appendChild(wrapper);
@@ -83,14 +83,15 @@ var GLOBALS =
 		layer.appendChild(monthView);
 	},
 
+	addReminder: async function()
+	{
+		var ajax = new namespace.core.Ajax(API_BASE_URL + '/addReminder');
+		var result = await ajax.send({info: 'test'});
+		console.log(result);
+	},
+
 	onDayClick: async function()
 	{
-		var ajax = new namespace.core.Ajax(API_BASE_URL + '/getReminders');
-		var result = await ajax.send();
-
-		console.log(result);
-
-		return;
 		var day = this;
 
 		let mouse = new namespace.core.Mouse();
@@ -98,9 +99,11 @@ var GLOBALS =
 		let left = new namespace.core.Unit(mouse.getPositionX());
 		let top = new namespace.core.Unit(mouse.getPositionY());
 
-		let popup = HTMLElement.createElement('<popup></popup>');
-		popup.style.top = top.toString();
-		popup.style.left = left.toString();
+		let popup = HTMLElement.create('<popup></popup>');
+		popup.style.marginTop = top.toString();
+		popup.style.marginLeft = left.toString();
+
+		popup.appendChild('<wrapper_></wrapper_>');
 
 		let list = document.querySelector('layer#popups>list');
 		list.appendChild(popup);

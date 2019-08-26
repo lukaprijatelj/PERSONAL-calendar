@@ -106,6 +106,9 @@ var EXPRESS_APP =
 		// catch 404 and forward to error handler
 		app.use(EXPRESS_APP.catch404);
 
+		// catches API errors
+		app.use(API.errorHandler);
+
 		// error handler
 		app.use(EXPRESS_APP.errorHandler);		
 	}
