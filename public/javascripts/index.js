@@ -90,20 +90,36 @@ var GLOBALS =
 		console.log(result);
 	},
 
-	onDayClick: async function()
+	onDayClick: async function(event)
 	{
 		var day = this;
 
-		let mouse = new namespace.core.Mouse();
-
-		let left = new namespace.core.Unit(mouse.getPositionX());
-		let top = new namespace.core.Unit(mouse.getPositionY());
-
 		let popup = HTMLElement.create('<popup></popup>');
+		
+		let wrapper = HTMLElement.create('<wrapper_></wrapper_>');
+		popup.appendChild(wrapper);
+
+		let topBar = HTMLElement.create('<div class="top-bar"></div>');
+		wrapper.appendChild(topBar);
+
+		let middleBar = HTMLElement.create('<div class="middle-bar"></div>');
+		wrapper.appendChild(middleBar);
+
+		let bottomBar = HTMLElement.create('<div class="bottom-bar"></div>');
+		wrapper.appendChild(bottomBar);
+
+		let dayOffset = day.getOffset();
+		let dayHeight = day.getOuterHeight();
+		dayHeight = namespace.core.Unit.divide(dayHeight, 2);
+
+		let left = new namespace.core.Unit(dayOffset.left);
+		let top = new namespace.core.Unit(dayOffset.top);
+		top = namespace.core.Unit.add(top, dayHeight);
+
+		top = namespace.core.Unit.subtract(top, popup.getOuterHeight());
+
 		popup.style.marginTop = top.toString();
 		popup.style.marginLeft = left.toString();
-
-		popup.appendChild('<wrapper_></wrapper_>');
 
 		let list = document.querySelector('layer#popups>list');
 		list.appendChild(popup);
@@ -121,5 +137,3 @@ var GLOBALS =
 		layer.hide();
 	},
 };
-
-GLOBALS.init();
