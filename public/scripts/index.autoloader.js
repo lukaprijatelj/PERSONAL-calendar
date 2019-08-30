@@ -99,5 +99,9 @@
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Video.js"));
 	await Promise.all(loadingBlock);
 
+	loadingBlock = new Array();
+	loadingBlock.push(new namespace.core.AsyncImporter("scripts/index.js"));
+	await Promise.all(loadingBlock);
+
 	GLOBALS.init();
 })();

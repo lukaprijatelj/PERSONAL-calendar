@@ -14,9 +14,9 @@ var GLOBALS =
 		let layer = document.querySelector('layer#calendar');
 		layer.empty();
 
-		let monthView = HTMLElement.create('<month-view></month-view>');
+		let monthView = HTMLElement.parse('<month-view></month-view>');
 
-		let header = HTMLElement.create('<div class="header"></div>');
+		let header = HTMLElement.parse('<div class="header"></div>');
 		header.appendChild('<div>' + Date.getDayName(1) + '</div>');
 		header.appendChild('<vertical-line></vertical-line>');
 		header.appendChild('<div>' + Date.getDayName(2) + '</div>');
@@ -49,13 +49,13 @@ var GLOBALS =
 
 		while (zeroDate.getMonth() <= currentDay.getMonth())
 		{
-			let week = HTMLElement.create('<week></week>');
+			let week = HTMLElement.parse('<week></week>');
 
 			for (let j=0; j<DAYS_IN_WEEK; j++)
 			{
 				let dayName = Date.getDayName((j + 1) % DAYS_IN_WEEK);
-				let day = HTMLElement.create('<day data-day-name="' + dayName + '" class="clickable"></day>');
-				let wrapper = HTMLElement.create('<wrapper_></wrapper_>');
+				let day = HTMLElement.parse('<day data-day-name="' + dayName + '" class="clickable"></day>');
+				let wrapper = HTMLElement.parse('<wrapper_></wrapper_>');
 				wrapper.appendChild('<title>' + zeroDate.getDate() + '</title>');
 				wrapper.appendChild('<list></list>');
 				day.appendChild(wrapper);
@@ -94,29 +94,29 @@ var GLOBALS =
 	{
 		var day = this;
 
-		let popup = HTMLElement.create('<popup></popup>');
+		let popup = HTMLElement.parse('<popup></popup>');
 		
-		let wrapper = HTMLElement.create('<wrapper_></wrapper_>');
+		let wrapper = HTMLElement.parse('<wrapper_></wrapper_>');
 		popup.appendChild(wrapper);
 
-		let topBar = HTMLElement.create('<div class="top-bar"></div>');
+		let topBar = HTMLElement.parse('<div class="top-bar"></div>');
 		wrapper.appendChild(topBar);
 
-		let middleBar = HTMLElement.create('<div class="middle-bar"></div>');
+		let middleBar = HTMLElement.parse('<div class="middle-bar"></div>');
 		wrapper.appendChild(middleBar);
 
-		let bottomBar = HTMLElement.create('<div class="bottom-bar"></div>');
+		let bottomBar = HTMLElement.parse('<div class="bottom-bar"></div>');
 		wrapper.appendChild(bottomBar);
 
 		let dayOffset = day.getOffset();
 		let dayHeight = day.getOuterHeight();
-		dayHeight = namespace.core.Unit.divide(dayHeight, 2);
+		dayHeight = Unit.divide(dayHeight, 2);
 
-		let left = new namespace.core.Unit(dayOffset.left);
-		let top = new namespace.core.Unit(dayOffset.top);
-		top = namespace.core.Unit.add(top, dayHeight);
+		let left = new Unit(dayOffset.left);
+		let top = new Unit(dayOffset.top);
+		top = Unit.add(top, dayHeight);
 
-		top = namespace.core.Unit.subtract(top, popup.getOuterHeight());
+		top = Unit.subtract(top, popup.getOuterHeight());
 
 		popup.style.marginTop = top.toString();
 		popup.style.marginLeft = left.toString();

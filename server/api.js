@@ -1,6 +1,6 @@
 var upload = require('./upload.js');
 var DATABASE = require('./database.js');
-var ApiError = require('../public/javascripts/classes/ApiError.js');
+var ApiError = require('../public/scripts/classes/ApiError.js');
 var options = null;
 
 var API =
