@@ -105,19 +105,55 @@ WebPage.onDayClick = async function(event)
 {
 	var day = this;
 
+	let anchor = new namespace.html.Anchor();
 	let popup = HTMLElement.parse('<popup></popup>');
+	popup.cssAnimation('fade-in');
+	anchor.appendChild(popup);
 	
-	let wrapper = HTMLElement.parse('<wrapper_></wrapper_>');
+	let wrapper = new namespace.html.Wrapper();
 	popup.appendChild(wrapper);
 
-	let topBar = HTMLElement.parse('<div class="top-bar"></div>');
+
+	// -----------------------------
+	// top bar
+	// -----------------------------
+
+	let topBar = new namespace.html.Div();
+	topBar.addClass('top-bar');
 	wrapper.appendChild(topBar);
 
-	let middleBar = HTMLElement.parse('<div class="middle-bar"></div>');
+
+	// -----------------------------
+	// middle bar
+	// -----------------------------
+
+	let middleBar = new namespace.html.Div();
+	middleBar.addClass('middle-bar');
 	wrapper.appendChild(middleBar);
 
-	let bottomBar = HTMLElement.parse('<div class="bottom-bar"></div>');
+	var title = new namespace.html.TextInput();
+	title.setAttribute('placeholder', 'Enter title...');
+	middleBar.appendChild(title);
+	
+
+	// -----------------------------
+	// bottom bar
+	// -----------------------------
+
+	let bottomBar = new namespace.html.Div();
+	bottomBar.addClass('bottom-bar');
 	wrapper.appendChild(bottomBar);
+
+	let cancel = new namespace.html.Button('cancel');
+	bottomBar.appendChild(cancel);
+
+	let save = new namespace.html.Button('save');
+	bottomBar.appendChild(save);
+
+
+	// -----------------------------
+	// position popup
+	// -----------------------------
 
 	let dayOffset = day.getOffset();
 	let dayHeight = day.getOuterHeight();
@@ -129,11 +165,16 @@ WebPage.onDayClick = async function(event)
 
 	top = Unit.subtract(top, popup.getOuterHeight());
 
-	popup.style.marginTop = top.toString();
-	popup.style.marginLeft = left.toString();
+	anchor.style.marginTop = top.toString();
+	anchor.style.marginLeft = left.toString();
+
+
+	// -----------------------------
+	// show popups layer
+	// -----------------------------
 
 	let list = document.querySelector('layer#popups>list');
-	list.appendChild(popup);
+	list.appendChild(anchor);
 
 	let layer = document.querySelector('layer#popups');
 	layer.show();

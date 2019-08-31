@@ -100,6 +100,16 @@
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/TextArea.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/TextInput.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Video.js"));
+	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Wrapper.js"));
+	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Anchor.js"));
+	await Promise.all(loadingBlock);
+
+	// -----------------------------
+	// namespace-database
+	// -----------------------------
+
+	loadingBlock = new Array();
+	loadingBlock.push(new namespace.core.AsyncImporter("scripts/namespace-database/Reminder.js"));
 	await Promise.all(loadingBlock);
 
 	loadingBlock = new Array();

@@ -66,6 +66,12 @@ input
 
 
 
+popup>wrapper_
+{
+	margin: 20px;
+}
+
+
 /* ----------------------------- */
 /* Month view */
 /* ----------------------------- */
@@ -75,11 +81,6 @@ month-view
 	display: block;
 	width: 100%;
 	height: 100%;
-}
-
-wrapper_
-{
-	display: block;
 }
 
 month-view .header
