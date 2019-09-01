@@ -5,14 +5,10 @@ body
 	/* ----------------------------- */
 	--DARK-BLUE-COLOR: #1F52F2; 
 	--LIGHT-BLUE-COLOR: #0079FF; 
-	--LIGHT-GRAY-COLOR: #EBEBEB;
-	--DARK-GRAY-COLOR: #6e6e6e;
 	--LIGHT-RED-COLOR: #C3272B;
 	--DARK-RED-COLOR: #8F1D21;
-	--TEXT-COLOR: rgba(255, 255, 255, 0.5);
-	--LIGHT-BLACK-COLOR: rgba(20,19,22,1); 
-	--DARK-BLACK-COLOR: black;
 
+	--TEXT-COLOR: var(--LIGHT-BLACK-COLOR);
 	--EDITOR-POPUP-BACKGROUND: rgba(255, 255, 255, 0.05);
 	
 
@@ -20,8 +16,8 @@ body
 	color: var(--LIGHT-BLACK-COLOR);
 	font-family: 'Muli', sans-serif;
 
-	--LABEL-FONT-SIZE: 10px;
-    --DEFAULT-FONT-SIZE: 10px;
+	--LABEL-FONT-SIZE: 12px;
+    --DEFAULT-FONT-SIZE: 12px;
 
 	margin: 0;
 	padding: 0;
@@ -43,18 +39,14 @@ input
 	--INPUT-HIDDEN-PADDING: 4px;
 
 	font-family: 'Muli', sans-serif;
-	border-style: solid;
-	border-color: rgba(255, 255, 255, 0.2);
+	font-weight: 300;
 	vertical-align: bottom;
-	color: var(--TEXT-COLOR);
 	background: rgba(255, 255, 255, 0.05);
 
 	display: block;
-	max-width: 300px;
 	width: 100%;
 	min-height: calc(var(--DEFAULT-CONTROL-HEIGHT) - var(--INPUT-HIDDEN-PADDING));
 	font-size: var(--FONT-SIZE);
-	border-width: 1px;
 	padding: 5px 5px;
 	outline: none; 
 
@@ -64,12 +56,82 @@ input
     box-sizing: border-box;         /* Opera/IE 8+ */
 }
 
+input.title
+{
+	color: var(--LIGHT-BLUE-COLOR);
+}
+input.title:focus
+{
+	color: var(--LIGHT-BLUE-COLOR);
+}
 
 
+
+
+/* ----------------------------- */
+/* Button */
+/* ----------------------------- */
+button
+{
+	border-radius: 5px;
+	border-style: solid;
+	background-color: white;
+
+	color: var(--LIGHT-BLUE-COLOR);
+	border-color: var(--LIGHT-BLUE-COLOR);
+}
+
+button.dark
+{
+	color: white;
+	background-color: var(--LIGHT-BLUE-COLOR);
+}
+
+button.save
+{
+	margin-left: 5px;
+}
+
+
+
+/* ----------------------------- */
+/* Popup */
+/* ----------------------------- */
 popup>wrapper_
 {
 	margin: 20px;
+	display: flex;	
+    flex-direction: column;
 }
+
+popup .top-bar
+{
+	margin-bottom: 20px;
+}
+
+popup .middle-bar
+{
+	flex-grow: 1;
+}
+
+popup .bottom-bar
+{
+	text-align: right;
+}
+
+popup input.title
+{
+	border-bottom: 1px solid var(--LIGHT-GRAY-COLOR);
+	font-size: 20px;
+	font-weight: 100;
+}
+
+popup input.title:focus
+{
+	color: var(--LIGHT-BLUE-COLOR);
+	border-bottom: 1px solid var(--LIGHT-BLUE-COLOR);
+}
+
 
 
 /* ----------------------------- */
@@ -81,6 +143,7 @@ month-view
 	display: block;
 	width: 100%;
 	height: 100%;
+	font-size: 10px;
 }
 
 month-view .header
@@ -100,7 +163,7 @@ month-view .header>div
 
 month-view week
 {
-	--NUM-OF-WEEKS: 5;
+	--NUM-OF-WEEKS: 6;
 
 	display: flex;
 	width: 100%;

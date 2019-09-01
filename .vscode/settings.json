@@ -1,4 +1,5 @@
 {
     "editor.minimap.enabled": false,
-    "explorer.openEditors.visible": 0
+	"explorer.openEditors.visible": 0,
+	"editor.acceptSuggestionOnCommitCharacter": false
 }

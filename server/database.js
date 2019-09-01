@@ -39,16 +39,39 @@ var DATABASE =
 	/**
 	 * Adds uploaded file record to DATABASE.
 	 */
-	addReminder: async function(title)
+	addReminder: async function()
     {	
 		let remindersCollection = DATABASE.db.collection('reminders');	
 
 		let reminder = new namespace.database.Reminder();
 		reminder._id = uuidv1();
-		reminder.title = title;
 
 		await remindersCollection.insertOne(reminder);
-    },
+
+		return reminder;
+	},
+	
+	/**
+	 * updates reminder data.
+	 */
+	updateReminder: async function(reminder)
+	{
+		let remindersCollection = DATABASE.db.collection('reminders');	
+
+		await remindersCollection.replaceOne({ _id: reminder._id }, reminder);
+
+		return reminder;
+	},
+
+	/**
+	 * Removes all documents from reminders collection.
+	 */
+	removeAllReminders: async function()
+	{
+		let remindersCollection = DATABASE.db.collection('reminders');	
+
+		await remindersCollection.remove({});
+	},
 
 	/**
 	 * Gets all files that are uploaded

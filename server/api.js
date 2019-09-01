@@ -58,7 +58,7 @@ var API =
 		{
 			let data = request.body;
 
-			await DATABASE.addReminder('test');
+			await DATABASE.addReminder(data);
 
 			response.status(200).send();
 		}

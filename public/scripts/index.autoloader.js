@@ -102,6 +102,8 @@
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Video.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Wrapper.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Anchor.js"));
+	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/DatePicker.js"));
+	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Curtain.js"));
 	await Promise.all(loadingBlock);
 
 	// -----------------------------

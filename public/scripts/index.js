@@ -37,27 +37,16 @@ WebPage.loadMonthView = function(currentDay)
 	header.appendChild('<div>' + Date.getDayName(0) + '</div>');
 	monthView.appendChild(header);
 
-	let zeroDate = Date.clone(currentDay);
-	zeroDate.setDate(1);
-	
-	var dayIndex = zeroDate.getDay();
-
-	if (dayIndex == 0)
-	{
-		dayIndex = 7;
-	}
-
-	dayIndex--;
-	zeroDate.setDate(zeroDate.getDate() - dayIndex);
-
 	let DAYS_IN_WEEK = 7;
+	let days = namespace.html.DatePicker.getDataForMonth(currentDay);
 
-	while (zeroDate.getMonth() <= currentDay.getMonth())
+	for (i=0; i<days.length;)
 	{
 		let week = HTMLElement.parse('<week></week>');
-
+		
 		for (let j=0; j<DAYS_IN_WEEK; j++)
 		{
+			let zeroDate = days[i];
 			let dayName = Date.getDayName((j + 1) % DAYS_IN_WEEK);
 			let day = HTMLElement.parse('<day data-day-name="' + dayName + '" class="clickable"></day>');
 			let wrapper = HTMLElement.parse('<wrapper_></wrapper_>');
@@ -65,7 +54,7 @@ WebPage.loadMonthView = function(currentDay)
 			wrapper.appendChild('<list></list>');
 			day.appendChild(wrapper);
 			
-			day.onClick(WebPage.onDayClick.bind(day));
+			day.onClick(WebPage.onDayClick.bind(day, zeroDate));
 
 			if (zeroDate.getMonth() != currentDay.getMonth())
 			{
@@ -78,7 +67,7 @@ WebPage.loadMonthView = function(currentDay)
 			}
 
 			week.appendChild(day);
-			zeroDate.nextDay();
+			i++;
 		}
 
 		monthView.appendChild('<horizontal-line></horizontal-line>');
@@ -89,26 +78,15 @@ WebPage.loadMonthView = function(currentDay)
 };
 
 /**
- * Adds reminder for this day.
- */
-WebPage.addReminder = async function()
-{
-	var ajax = new namespace.core.Ajax(API_BASE_URL + '/addReminder');
-	var result = await ajax.send({info: 'test'});
-	console.log(result);
-};
-
-/**
  * Shows popup on day click.
  */
-WebPage.onDayClick = async function(event)
+WebPage.onDayClick = async function(date, event)
 {
 	var day = this;
 
-	let anchor = new namespace.html.Anchor();
+	
 	let popup = HTMLElement.parse('<popup></popup>');
 	popup.cssAnimation('fade-in');
-	anchor.appendChild(popup);
 	
 	let wrapper = new namespace.html.Wrapper();
 	popup.appendChild(wrapper);
@@ -122,6 +100,11 @@ WebPage.onDayClick = async function(event)
 	topBar.addClass('top-bar');
 	wrapper.appendChild(topBar);
 
+	var title = new namespace.html.TextInput();
+	title.addClass('title');
+	title.setAttribute('placeholder', 'Enter title...');
+	topBar.appendChild(title);
+
 
 	// -----------------------------
 	// middle bar
@@ -131,9 +114,52 @@ WebPage.onDayClick = async function(event)
 	middleBar.addClass('middle-bar');
 	wrapper.appendChild(middleBar);
 
-	var title = new namespace.html.TextInput();
-	title.setAttribute('placeholder', 'Enter title...');
-	middleBar.appendChild(title);
+	let onDateClick = (event) =>
+	{
+		let mouse = new namespace.core.Mouse();
+
+		let picker = new namespace.html.DatePicker();
+		picker.setDay(date);
+		picker.onClose.addListener(new namespace.core.EventListener(()=>
+		{
+			WebPage.hideLastPopup();
+			GarbageCollector.dispose(picker);
+		}, true));
+		picker.onDatePick.addListener(new namespace.core.EventListener((date)=>
+		{
+			event.target.value = Date.format(date, 'dd MMM yyyy');
+		}, true));
+
+		let anchor = new namespace.html.Anchor();
+		anchor.setPosition(mouse.getPositionY(), mouse.getPositionX());
+		anchor.appendChild(picker);
+
+		let curtain = new namespace.html.Curtain();
+		curtain.onClick(WebPage.hideLastPopup);
+
+		let list = document.querySelector('layer#popups>list');
+		list.appendChild(curtain);
+		list.appendChild(anchor);
+	};
+
+	var fromDate = new namespace.html.TextInput();
+	fromDate.addClass('from-date');
+	fromDate.setAttribute('placeholder', '01 Jan 1970 00:00:00 GMT');
+	fromDate.value = Date.format(date, 'dd MMM yyyy');
+	fromDate.onClick(onDateClick);	
+	middleBar.appendChild(fromDate);
+
+	var toDate = new namespace.html.TextInput();
+	toDate.addClass('from-date');
+	toDate.setAttribute('placeholder', '01 Jan 1970 00:00:00 GMT');
+	toDate.value = Date.format(date, 'dd MMM yyyy');
+	toDate.onClick(onDateClick);
+	middleBar.appendChild(toDate);
+
+	var description = new namespace.html.TextInput();
+	description.addClass('description');
+	description.setAttribute('placeholder', 'Enter description...');
+	middleBar.appendChild(description);
 	
 
 	// -----------------------------
@@ -145,9 +171,13 @@ WebPage.onDayClick = async function(event)
 	wrapper.appendChild(bottomBar);
 
 	let cancel = new namespace.html.Button('cancel');
+	cancel.onClick(WebPage.onCancelClick);
 	bottomBar.appendChild(cancel);
 
 	let save = new namespace.html.Button('save');
+	save.addClass('dark');
+	save.addClass('save');
+	save.onClick(WebPage.onSaveClick);
 	bottomBar.appendChild(save);
 
 
@@ -165,8 +195,9 @@ WebPage.onDayClick = async function(event)
 
 	top = Unit.subtract(top, popup.getOuterHeight());
 
-	anchor.style.marginTop = top.toString();
-	anchor.style.marginLeft = left.toString();
+	let anchor = new namespace.html.Anchor();
+	anchor.setPosition(top, left);
+	anchor.appendChild(popup);
 
 
 	// -----------------------------
@@ -181,9 +212,65 @@ WebPage.onDayClick = async function(event)
 };
 
 /**
+ * Adds reminder for this day.
+ */
+WebPage.addReminder = async function(title, description)
+{
+	var ajax = new namespace.core.Ajax(API_BASE_URL + '/addReminder');
+
+	let data = new namespace.database.Reminder();
+	data.title = title;
+	data.description = description;
+
+	var result = await ajax.send(data);
+	console.log(result);
+};
+
+/**
+ * Save button was clicked.
+ */
+WebPage.onSaveClick = function()
+{
+	let title = document.querySelector('popup input.title');
+	let description = document.querySelector('popup input.description');
+	let time = document.querySelector('popup input.time');
+
+	WebPage.addReminder(title.value, description.value, Date.parse(time.value));
+
+	WebPage.hidePopupsLayer();
+};
+
+/**
+ * Cancel button was clicked.
+ */
+WebPage.onCancelClick = function()
+{
+	WebPage.hidePopupsLayer();
+};
+
+/**
+ * Hides popups layer.
+ */
+WebPage.hideLastPopup = function()
+{
+	let popup = document.querySelector('layer#popups>list anchor_:last-child');
+
+	popup.previousSibling.remove();
+	popup.remove();
+};
+
+/**
  * Hides popup on curtain click.
  */
 WebPage.onPopupCurtainClick = function()
+{
+	WebPage.hidePopupsLayer();
+};
+
+/**
+ * Hides popups layer.
+ */
+WebPage.hidePopupsLayer = function()
 {
 	let list = document.querySelector('layer#popups>list');
 	list.empty();
