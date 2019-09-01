@@ -84,7 +84,6 @@ WebPage.onDayClick = async function(date, event)
 {
 	var day = this;
 
-	
 	let popup = HTMLElement.parse('<popup></popup>');
 	popup.cssAnimation('fade-in');
 	
@@ -116,42 +115,48 @@ WebPage.onDayClick = async function(date, event)
 
 	let onDateClick = (event) =>
 	{
-		let mouse = new namespace.core.Mouse();
+		let view = event.target;
+		view.addClass('selected');
 
-		let picker = new namespace.html.DatePicker();
-		picker.setDay(date);
-		picker.onClose.addListener(new namespace.core.EventListener(()=>
+		let picker = new namespace.html.DatePicker(date);
+		picker.onClose.addListener(new namespace.core.EventListener(() =>
 		{
 			WebPage.hideLastPopup();
 			GarbageCollector.dispose(picker);
 		}, true));
-		picker.onDatePick.addListener(new namespace.core.EventListener((date)=>
+		picker.onDatePick.addListener(new namespace.core.EventListener((date) =>
 		{
-			event.target.value = Date.format(date, 'dd MMM yyyy');
+			view.date = date;
+			view.value = Date.format(date, 'dd MMM yyyy');
 		}, true));
 
+		let targetOffset = view.getOffset();	
+		let left = new Unit(targetOffset.left);
+		let top = new Unit(targetOffset.top);
+		top = Unit.add(top, view.getOuterHeight());
+
 		let anchor = new namespace.html.Anchor();
-		anchor.setPosition(mouse.getPositionY(), mouse.getPositionX());
+		anchor.setPosition(top, left);
 		anchor.appendChild(picker);
 
 		let curtain = new namespace.html.Curtain();
 		curtain.onClick(WebPage.hideLastPopup);
 
-		let list = document.querySelector('layer#popups>list');
+		let list = document.querySelector('layer#popups');
 		list.appendChild(curtain);
 		list.appendChild(anchor);
 	};
 
 	var fromDate = new namespace.html.TextInput();
 	fromDate.addClass('from-date');
-	fromDate.setAttribute('placeholder', '01 Jan 1970 00:00:00 GMT');
+	fromDate.date = date;
 	fromDate.value = Date.format(date, 'dd MMM yyyy');
 	fromDate.onClick(onDateClick);	
 	middleBar.appendChild(fromDate);
 
 	var toDate = new namespace.html.TextInput();
-	toDate.addClass('from-date');
-	toDate.setAttribute('placeholder', '01 Jan 1970 00:00:00 GMT');
+	toDate.addClass('to-date');
+	toDate.date = date;
 	toDate.value = Date.format(date, 'dd MMM yyyy');
 	toDate.onClick(onDateClick);
 	middleBar.appendChild(toDate);
@@ -204,11 +209,8 @@ WebPage.onDayClick = async function(date, event)
 	// show popups layer
 	// -----------------------------
 
-	let list = document.querySelector('layer#popups>list');
-	list.appendChild(anchor);
-
 	let layer = document.querySelector('layer#popups');
-	layer.show();
+	layer.appendChild(anchor);
 };
 
 /**
@@ -253,17 +255,25 @@ WebPage.onCancelClick = function()
  */
 WebPage.hideLastPopup = function()
 {
-	let popup = document.querySelector('layer#popups>list anchor_:last-child');
+	let anchor = document.querySelector('layer#popups anchor_:last-child');
 
-	popup.previousSibling.remove();
-	popup.remove();
+	anchor.previousSibling.remove();
+	anchor.remove();
 };
 
 /**
  * Hides popup on curtain click.
  */
-WebPage.onPopupCurtainClick = function()
+WebPage.onPopupCurtainClick = function(event)
 {
+	let mouse = new namespace.core.Mouse(event);
+	let list = document.querySelector('layer#popups');
+	
+	if (mouse.isTarget(list) == false)
+	{
+		return;
+	}
+
 	WebPage.hidePopupsLayer();
 };
 
@@ -272,9 +282,6 @@ WebPage.onPopupCurtainClick = function()
  */
 WebPage.hidePopupsLayer = function()
 {
-	let list = document.querySelector('layer#popups>list');
+	let list = document.querySelector('layer#popups');
 	list.empty();
-
-	let layer = document.querySelector('layer#popups');
-	layer.hide();
 };

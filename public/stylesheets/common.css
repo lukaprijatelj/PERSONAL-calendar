@@ -60,9 +60,11 @@ input.title
 {
 	color: var(--LIGHT-BLUE-COLOR);
 }
-input.title:focus
+
+input.selected
 {
 	color: var(--LIGHT-BLUE-COLOR);
+	border-bottom: 1px solid var(--LIGHT-BLUE-COLOR);
 }
 
 
@@ -130,6 +132,24 @@ popup input.title:focus
 {
 	color: var(--LIGHT-BLUE-COLOR);
 	border-bottom: 1px solid var(--LIGHT-BLUE-COLOR);
+}
+
+
+
+
+
+/* ----------------------------- */
+/* Layers */
+/* ----------------------------- */
+layer-resizable,
+layer#popups
+{
+	background-color: rgba(0,0,0,0.5);
+}
+
+layer#popups[num-of-children="0"]
+{
+	display: none !important;
 }
 
 
