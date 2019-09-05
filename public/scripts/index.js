@@ -119,20 +119,23 @@ WebPage.onDayClick = async function(date, event)
 		view.addClass('selected');
 
 		let picker = new namespace.html.DatePicker(date);
-		picker.onClose.addListener(new namespace.core.EventListener(() =>
+		picker.onDispose.addListener(() =>
+		{
+			view.removeClass('selected');
+		}, true);
+		picker.onClose.addListener(() =>
 		{
 			WebPage.hideLastPopup();
 			GarbageCollector.dispose(picker);
-		}, true));
-		picker.onDatePick.addListener(new namespace.core.EventListener((date) =>
+		}, true);
+		picker.onDatePick.addListener((date) =>
 		{
 			view.date = date;
 			view.value = Date.format(date, 'dd MMM yyyy');
-		}, true));
+		}, true);
 
-		let targetOffset = view.getOffset();	
-		let left = new Unit(targetOffset.left);
-		let top = new Unit(targetOffset.top);
+		let left = view.getLeft();
+		let top = view.getTop();
 		top = Unit.add(top, view.getOuterHeight());
 
 		let anchor = new namespace.html.Anchor();
@@ -160,6 +163,11 @@ WebPage.onDayClick = async function(date, event)
 	toDate.value = Date.format(date, 'dd MMM yyyy');
 	toDate.onClick(onDateClick);
 	middleBar.appendChild(toDate);
+
+	var timeInput = new namespace.html.TextInput();
+	timeInput.addClass('time');
+	timeInput.value = Date.format(date, 'hh:mm');
+	middleBar.appendChild(timeInput);
 
 	var description = new namespace.html.TextInput();
 	description.addClass('description');
@@ -190,12 +198,11 @@ WebPage.onDayClick = async function(date, event)
 	// position popup
 	// -----------------------------
 
-	let dayOffset = day.getOffset();
 	let dayHeight = day.getOuterHeight();
 	dayHeight = Unit.divide(dayHeight, 2);
 
-	let left = new Unit(dayOffset.left);
-	let top = new Unit(dayOffset.top);
+	let left = day.getLeft();
+	let top = day.getTop();
 	top = Unit.add(top, dayHeight);
 
 	top = Unit.subtract(top, popup.getOuterHeight());
@@ -216,12 +223,14 @@ WebPage.onDayClick = async function(date, event)
 /**
  * Adds reminder for this day.
  */
-WebPage.addReminder = async function(title, description)
+WebPage.addReminder = async function(title, startTimestamp, endTimestamp, description)
 {
 	var ajax = new namespace.core.Ajax(API_BASE_URL + '/addReminder');
 
 	let data = new namespace.database.Reminder();
 	data.title = title;
+	data.startTimestamp = startTimestamp;
+	data.endTimestamp = endTimestamp;
 	data.description = description;
 
 	var result = await ajax.send(data);
@@ -236,8 +245,45 @@ WebPage.onSaveClick = function()
 	let title = document.querySelector('popup input.title');
 	let description = document.querySelector('popup input.description');
 	let time = document.querySelector('popup input.time');
+	let fromDate = document.querySelector('popup input.from-date');
+	let toDate = document.querySelector('popup input.to-date');
+	var anyErrors = false;
 
-	WebPage.addReminder(title.value, description.value, Date.parse(time.value));
+	var timeObj = new Date('1970-01-01T' + time.value + 'Z');
+	var fromObj = Date.parse(fromDate.value);
+	var toObj = Date.parse(toDate.value);
+
+	if (!title.value)
+	{
+		title.addError();
+		anyErrors = true;
+	}
+
+	if (isNaN(timeObj))
+	{
+		time.addError();
+		anyErrors = true;
+	}
+
+	if (isNaN(fromObj))
+	{
+		fromDate.addError();
+		anyErrors = true;
+	}
+
+	if (isNaN(toObj))
+	{
+		toDate.addError();
+		anyErrors = true;
+	}
+
+	if (anyErrors == true)
+	{
+		return;
+	}
+
+	var realFrom = new Date(fromDate.value + ' ' + time.value);
+	WebPage.addReminder(title.value, realFrom.getTime(), toObj.getTime(), description.value);
 
 	WebPage.hidePopupsLayer();
 };
