@@ -138,16 +138,15 @@ WebPage.onDayClick = async function(date, event)
 		let top = view.getTop();
 		top = Unit.add(top, view.getOuterHeight());
 
-		let anchor = new namespace.html.Anchor();
+		let anchor = new namespace.html.Anchor(picker);
 		anchor.setPosition(top, left);
-		anchor.appendChild(picker);
 
 		let curtain = new namespace.html.Curtain();
 		curtain.onClick(WebPage.hideLastPopup);
 
 		let list = document.querySelector('layer#popups');
 		list.appendChild(curtain);
-		list.appendChild(anchor);
+		list.appendChild(picker);
 	};
 
 	var fromDate = new namespace.html.TextInput();
@@ -207,9 +206,8 @@ WebPage.onDayClick = async function(date, event)
 
 	top = Unit.subtract(top, popup.getOuterHeight());
 
-	let anchor = new namespace.html.Anchor();
+	let anchor = new namespace.html.Anchor(popup);
 	anchor.setPosition(top, left);
-	anchor.appendChild(popup);
 
 
 	// -----------------------------
@@ -217,7 +215,7 @@ WebPage.onDayClick = async function(date, event)
 	// -----------------------------
 
 	let layer = document.querySelector('layer#popups');
-	layer.appendChild(anchor);
+	layer.appendChild(popup);
 };
 
 /**
@@ -301,10 +299,11 @@ WebPage.onCancelClick = function()
  */
 WebPage.hideLastPopup = function()
 {
-	let anchor = document.querySelector('layer#popups anchor_:last-child');
+	let popup = document.querySelector('layer#popups > *:last-child');
 
-	anchor.previousSibling.remove();
-	anchor.remove();
+	// removes curtain
+	popup.previousSibling.remove();
+	popup.remove();
 };
 
 /**

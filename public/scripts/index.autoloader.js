@@ -50,7 +50,6 @@
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-core/console.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-core/Date.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-core/Function.js"));
-	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-core/HTMLElement.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-core/LoadingCounter.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-core/Math.js"));  
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-core/Object.js"));
@@ -103,6 +102,7 @@
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Anchor.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/DatePicker.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/Curtain.js"));
+	loadingBlock.push(new namespace.core.AsyncImporter("externals/namespace-html/HTMLElement.js"));
 	await Promise.all(loadingBlock);
 
 	// -----------------------------

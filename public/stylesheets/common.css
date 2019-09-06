@@ -61,7 +61,7 @@ input.title
 	color: var(--LIGHT-BLUE-COLOR);
 }
 
-input.error
+input[error]
 {
 	color: var(--LIGHT-RED-COLOR);
 	border-bottom: 1px solid var(--LIGHT-RED-COLOR);
@@ -136,7 +136,7 @@ popup input.title
 	font-weight: 100;
 }
 
-popup input.error
+popup input[error]
 {
 	color: var(--LIGHT-RED-COLOR);
 	border-bottom: 1px solid var(--LIGHT-RED-COLOR);
