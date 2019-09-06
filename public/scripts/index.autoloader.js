@@ -114,6 +114,7 @@
 	await Promise.all(loadingBlock);
 
 	loadingBlock = new Array();
+	loadingBlock.push(new namespace.core.AsyncImporter("scripts/classes/Popup.js"));
 	loadingBlock.push(new namespace.core.AsyncImporter("scripts/index.js"));
 	await Promise.all(loadingBlock);
 

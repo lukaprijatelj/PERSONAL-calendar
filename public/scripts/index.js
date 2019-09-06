@@ -84,7 +84,7 @@ WebPage.onDayClick = async function(date, event)
 {
 	var day = this;
 
-	let popup = HTMLElement.parse('<popup></popup>');
+	let popup = new namespace.html.Popup();
 	popup.cssAnimation('fade-in');
 	
 	let wrapper = new namespace.html.Wrapper();
