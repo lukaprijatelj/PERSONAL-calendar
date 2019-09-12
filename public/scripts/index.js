@@ -131,7 +131,7 @@ WebPage.onDayClick = async function(date, event)
 		picker.onDatePick.addListener((date) =>
 		{
 			view.date = date;
-			view.value = Date.format(date, 'dd MMM yyyy');
+			view.value = Date.format(date, 'dd MMM. yyyy');
 		}, true);
 
 		let left = view.getLeft();
@@ -152,14 +152,14 @@ WebPage.onDayClick = async function(date, event)
 	var fromDate = new namespace.html.TextInput();
 	fromDate.addClass('from-date');
 	fromDate.date = date;
-	fromDate.value = Date.format(date, 'dd MMM yyyy');
+	fromDate.value = Date.format(date, 'dd MMM. yyyy');
 	fromDate.onClick(onDateClick);	
 	middleBar.appendChild(fromDate);
 
 	var toDate = new namespace.html.TextInput();
 	toDate.addClass('to-date');
 	toDate.date = date;
-	toDate.value = Date.format(date, 'dd MMM yyyy');
+	toDate.value = Date.format(date, 'dd MMM. yyyy');
 	toDate.onClick(onDateClick);
 	middleBar.appendChild(toDate);
 
