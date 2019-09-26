@@ -8,6 +8,11 @@ body
 	--LIGHT-RED-COLOR: #C3272B;
 	--DARK-RED-COLOR: #8F1D21;
 
+	--LIGHT-BLACK-COLOR: rgba(20,19,22,1); 
+	--DARK-BLACK-COLOR: black;
+	--LIGHT-GRAY-COLOR: #EBEBEB;
+	--DARK-GRAY-COLOR: #6e6e6e;
+
 	--TEXT-COLOR: var(--LIGHT-BLACK-COLOR);
 	--EDITOR-POPUP-BACKGROUND: rgba(255, 255, 255, 0.05);
 	
@@ -164,94 +169,4 @@ layer#popups
 layer#popups[num-of-children="0"]
 {
 	display: none !important;
-}
-
-
-
-/* ----------------------------- */
-/* Month view */
-/* ----------------------------- */
-
-month-view
-{
-	display: block;
-	width: 100%;
-	height: 100%;
-	font-size: 10px;
-}
-
-month-view .header
-{
-	display: flex;
-}
-
-month-view .header>div
-{
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: 0;
-
-	font-weight: 700;
-	text-align: center;
-}
-
-month-view week
-{
-	--NUM-OF-WEEKS: 6;
-
-	display: flex;
-	width: 100%;
-	height: calc(100% / var(--NUM-OF-WEEKS));
-}
-
-month-view vertical-line
-{
-	display: block;
-	min-height: 100%;
-	width: 1px;
-	background-color: var(--LIGHT-GRAY-COLOR);
-}
-
-month-view horizontal-line
-{
-	display: block;
-	height: 1px;
-	min-width: 100%;
-	background-color: var(--LIGHT-GRAY-COLOR);
-}
-
-month-view day
-{
-	display: block;
-
-	flex-grow: 1;
-	flex-shrink: 1;
-	flex-basis: 0;
-	position: relative;
-
-	/*border-width: 1px 1px 0 0;
-	border-style: solid;
-	border-color: var(--LIGHT-GRAY-COLOR);*/
-}
-
-month-view day wrapper_
-{
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-}
-
-
-month-view day.not-current-month wrapper_
-{
-	opacity: 0.3;
-}
-
-month-view day title
-{
-	display: block;
-	
-	text-align: center;
 }
